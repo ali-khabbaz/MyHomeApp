@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="app.shome.ir.shome">
+
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:name=".SHomeApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <!-- <activity -->
+        <!-- android:name=".ui.Test1" -->
+        <!-- android:label="@string/app_name" -->
+        <!-- android:parentActivityName=".SHomeActivity" -->
+        <!-- android:theme="@style/AppTheme.NoActionBar"> -->
+
+
+        <!-- </activity> -->
+        <!-- <activity -->
+        <!-- android:name=".ui.NodeManagmenActivity" -->
+        <!-- android:label="@string/title_activity_node_managmen" -->
+        <!-- android:theme="@style/Theme.Backable" /> -->
+        <!-- <activity android:name=".ui.TestActivity"></activity> -->
+        <activity
+            android:name=".ui.MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.Main2Activity"
+            android:label="@string/title_activity_main2"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.LoginActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".ui.UserActivity"
+            android:label="@string/title_activity_main2"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ui.TestActivity" />
+        <activity
+            android:name=".ui.ZoneActivity"
+            android:label="@string/title_activity_main2"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ui.DeviceActivity"
+            android:label="@string/title_activity_main2"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ui.IntroActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".SettingActivity"></activity>
+    </application>
+
+</manifest>

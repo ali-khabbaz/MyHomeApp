@@ -1,0 +1,95 @@
+<resources>
+    <string name="app_name">خانه هوشمند</string>
+    <string name="title_activity_shome">خانه هوشمند</string>
+    <string name="name">عنوان:</string>
+    <string name="send_error">خطا در ارتباط با مرکز</string>
+    <string name="ok"> باشه</string>
+    <string name="tryagain">تلاش مجدد</string>
+    <string name="cancle">بی خیال!</string>
+    <string name="server_connection">ارتباط به سرور ....</string>
+    <string name="new_device">تعریف دستگاه جدید</string>
+    <string name="new_zone">تعریف اتاق جدید</string>
+    <string name="new_category">تعریف نوع جدید</string>
+    <string name="new_module">تعیف ماژول جدید</string>
+    <string name="new_scenario">تعریف سناریو جدید</string>
+    <string name="nav_node_anagement">مدیریت نودها</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="device_tab_title">دستگاه ها</string>
+    <string name="zone_tab_title">اتاق ها</string>
+    <string name="category_tab_title">انواع دستگاه ها</string>
+    <string name="zone">موقعیت </string>
+    <string name="last_use">آخرین بازدید </string>
+    <string name="user_name">نام کاربر</string>
+    <string name="user_id">کد کاربری</string>
+    <string name="pass">رمز عبور</string>
+    <string name="login">ورود</string>
+    <string name="user_group">گروه کاربری</string>
+    <string name="save">ذخیره</string>
+    <string name="cancel">کنسل</string>
+    <string name="edit_fav">مدیریت صفحه اصلی</string>
+    <string name="about_me">ا</string>
+    <string name="rules">وانین</string>
+    <string name="exit">خروج</string>
+    <string name="edit">ویرایش</string>
+    <string name="edit_senario">ناریوها</string>
+    <string name="edit_user">اربران</string>
+    <string name="edit_zone">تاقها</string>
+    <string name="edit_node">ستگاه ها</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_node_managmen">مدیریت دستگاه ها</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_main3">Main3Activity</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+
+    <string-array name="catrgories">
+        <item>LIGHT </item>
+        <item>LIGHTDIMMER </item>
+        <item>GASG </item>
+        <item>GASS </item>
+        <item>WATERG </item>
+        <item>WATERS </item>
+        <item>MOTION </item>
+        <item>GASSENS </item>
+        <item>SMOKESENSE </item>
+        <item>WATERLEACK </item>
+        <item>TEMPW </item>
+        <item>TEMPR </item>
+        <item>DoorWindowSENS </item>
+        <item>LUXMETER </item>
+        <item>PARKINGSENS </item>
+    </string-array>
+    <string-array name="catrgories_fa">
+        <item>LIGHT </item>
+        <item>LIGHTDIMMER </item>
+        <item>GASG </item>
+        <item>GASS </item>
+        <item>WATERG </item>
+        <item>WATERS </item>
+        <item>MOTION </item>
+        <item>GASSENS </item>
+        <item>SMOKESENSE </item>
+        <item>WATERLEACK </item>
+        <item>TEMPW </item>
+        <item>TEMPR </item>
+        <item>DoorWindowSENS </item>
+        <item>LUXMETER </item>
+        <item>PARKINGSENS </item>
+    </string-array>
+    <string-array name="zones">
+        <item>Room</item>
+        <item>Hall</item>
+        <item>BathRoom</item>
+    </string-array>
+
+    <string-array name="zones_fa">
+        <item>اتاق</item>
+        <item>پذیرایی</item>
+        <item>حمام</item>
+    </string-array>
+
+
+</resources>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+    android:layout_margin="5dp"
+
+
+    android:gravity="center">
+
+    <ImageButton
+        android:id="@+id/toggleButton2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:scaleType="fitCenter"
+
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:background="@drawable/my_main_buttom"
+        android:duplicateParentState="true"
+        android:gravity="center"
+        android:src="@drawable/light3"
+        android:padding="30dp"
+        android:clickable="true"/>
+
+
+
+    <TextView
+        android:focusable="true"
+        android:clickable="true"
+        android:focusableInTouchMode="true"
+        android:id="@+id/lightZoon"
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/toggleButton2"
+        android:layout_alignStart="@+id/toggleButton2"
+        android:layout_alignTop="@+id/toggleButton2"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1"
+        android:gravity="center"
+
+        android:paddingTop="5dp"
+        android:text="New Text"
+        android:textColor="@color/white" />
+
+    <TextView
+
+        android:focusableInTouchMode="true"
+        android:id="@+id/lightName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/toggleButton2"
+        android:layout_alignLeft="@+id/toggleButton2"
+        android:layout_alignStart="@+id/toggleButton2"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_weight="2"
+        android:gravity="center"
+        android:duplicateParentState="true"
+        android:text="Large Text"
+
+        android:textColor="@color/white"
+        android:paddingBottom="5dp" />
+
+    <ProgressBar
+        android:focusable="true"
+        android:clickable="true"
+        android:focusableInTouchMode="true"
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:id="@+id/progressBar" />
+
+</FrameLayout>
+

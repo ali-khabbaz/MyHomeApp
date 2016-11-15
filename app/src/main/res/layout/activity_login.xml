@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/login_black"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/user_login_image"
+        android:layout_width="190dp"
+        android:layout_height="190dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="75dp"
+        android:background="@color/white_pressed"
+        app:srcCompat="@drawable/user" />
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="70dp"
+        app:srcCompat="@drawable/user_shape" />
+
+    <ImageView
+        android:id="@+id/user_shape"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="70dp"
+        app:srcCompat="@drawable/user_shape2" />
+
+    <ImageView
+        android:id="@+id/user_shape2"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="70dp"
+        android:visibility="invisible"
+        app:srcCompat="@drawable/user_shape3" />
+
+    <EditText
+        android:id="@+id/user_id"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/user_login_image"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/tedit"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="@string/user_id"
+        android:inputType="textPersonName"
+        android:textColor="@color/text"
+        android:textColorHint="@color/text_hint" />
+
+    <EditText
+        android:id="@+id/user_pass"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/user_id"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/tedit"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="@string/pass"
+        android:inputType="numberPassword"
+        android:password="true"
+        android:textColor="@color/text"
+        android:textColorHint="@color/text_hint" />
+
+    <Button
+        android:id="@+id/login_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/user_id"
+        android:layout_below="@+id/user_pass"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/my_back_buttom"
+        android:text="@string/login"
+        android:textColor="@color/text" />
+
+
+    <Button
+        android:id="@+id/exit_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/user_id"
+        android:layout_below="@+id/user_pass"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/my_back_buttom2"
+        android:text="@string/exit"
+        android:textColor="@color/text" />
+
+
+</RelativeLayout>
