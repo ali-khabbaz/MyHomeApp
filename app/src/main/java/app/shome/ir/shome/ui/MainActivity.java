@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 
 import android.os.Bundle;
@@ -46,6 +47,8 @@ import app.shome.ir.shome.db.model.Zone;
 import app.shome.ir.shome.service.ServiceDelegate;
 import app.shome.ir.shome.service.Services;
 
+import static android.R.attr.id;
+
 public class MainActivity extends SHomeActivity implements ServiceDelegate, SHomeConstant, OnClickListener {
     //    ProgressDialog progressDialog;
 //    AlertDialog tryAgainDialog;
@@ -53,6 +56,7 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
     TextView progressTextView;
     //    ViewPager viewPager;
     LinearLayout zoneTabLayout;
+    LinearLayout dashboard_layer;
     //    DashboardFragment dashboard;
 //    Vector<ZoneFragment> zoneFragments = new Vector<>();
 //    Vector<View> zoneTabs = new Vector<>();
@@ -106,6 +110,7 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
         final Animation rotation_out = AnimationUtils.loadAnimation(this, R.anim.unclockwise_rotation);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         setting_layer = (LinearLayout) findViewById(R.id.setting_layer);
+        dashboard_layer = (LinearLayout) findViewById(R.id.dashboardLayer);
         edit_device = (LinearLayout) findViewById(R.id.edit_device);
         edit_zone = (LinearLayout) findViewById(R.id.edit_zone);
         edit_senario = (LinearLayout) findViewById(R.id.edit_senario);
@@ -135,41 +140,52 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
             init();
         }
         final int screenWidth = Utils.getScreenWidth(MainActivity.this);
-        final int sw = screenWidth / 8 * 6;
+        final int sw = screenWidth ;
+        final int dtime = 1500 ;
         setting_layer.setX(orgPos1X - screenWidth);
         assert settingbtn != null;
         settingbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (settingbtn.isChecked()) {
+                    settingbtn.setClickable(false);
 //                    setting_layer.setX(orgPos1X - screenWidth );
 
                     rotation.setRepeatCount(Animation.INFINITE);
                     rotation.setRepeatCount(0);
                     settingbtn.startAnimation(rotation_out);
 //                    settingbtn.setHighlightColor(0xff33b5e5);
-                    setting_layer.animate().translationX(setting_layer.getX() + sw).setDuration(2000);
-//                    recyclerView.animate().alpha((float) 0.3).setDuration(2000);
-                    recyclerView.animate().translationX(screenWidth).setDuration(2000);
+                    setting_layer.animate().translationX(setting_layer.getX() + sw).setDuration(dtime);
+                    dashboard_layer.animate().alpha((float) 0.3).setDuration(dtime);
+
+//                    recyclerView.animate().translationX(screenWidth).setDuration(dtime);
 //                    setting_layer.setVisibility(View.VISIBLE);
 //                    recyclerView.setVisibility(View.GONE);
-/*                   final Handler handler = new Handler();
+                   final Handler handler = new Handler();
                     setting_layer.setEnabled(false);
                     handler.postDelayed(new Runnable() {
                         public void run() {
-                            setting_layer.setEnabled(true);
+                            settingbtn.setClickable(true);
                         }
-                    }, 2000);*/
+                    }, dtime);
 
 
                 } else {
+                    settingbtn.setClickable(false);
 
                     settingbtn.startAnimation(rotation);
-                    setting_layer.animate().translationX(orgPos1X - screenWidth).setDuration(2000);
-                    recyclerView.animate().translationX(orgPos1X).setDuration(2000);
-//                    recyclerView.animate().alpha(1).setDuration(2000);
+                    setting_layer.animate().translationX(orgPos1X - screenWidth).setDuration(dtime);
+//                    recyclerView.animate().translationX(orgPos1X).setDuration(dtime);
+                    dashboard_layer.animate().alpha(1).setDuration(dtime);
 //                    setting_layer.setVisibility(View.GONE);
 //                    recyclerView.setVisibility(View.VISIBLE);
+                    final Handler handler = new Handler();
+                    setting_layer.setEnabled(false);
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            settingbtn.setClickable(true);
+                        }
+                    }, dtime);
 
 
                 }

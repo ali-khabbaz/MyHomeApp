@@ -27,14 +27,14 @@
     <string name="save">ذخیره</string>
     <string name="cancel">کنسل</string>
     <string name="edit_fav">مدیریت صفحه اصلی</string>
-    <string name="about_me">ا</string>
-    <string name="rules">وانین</string>
+    <string name="about_me">درباره ما</string>
+    <string name="rules">قوانین</string>
     <string name="exit">خروج</string>
     <string name="edit">ویرایش</string>
-    <string name="edit_senario">ناریوها</string>
-    <string name="edit_user">اربران</string>
-    <string name="edit_zone">تاقها</string>
-    <string name="edit_node">ستگاه ها</string>
+    <string name="edit_senario">سناریوها</string>
+    <string name="edit_user">کاربران</string>
+    <string name="edit_zone">اتاق ها</string>
+    <string name="edit_node">دستگاه ها</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
