@@ -12,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:visibility="visible"
         android:id="@+id/dashboardLayer">
 
         <LinearLayout
@@ -102,29 +101,21 @@
             android:layout_width="0dp"
             android:layout_weight="4"
             android:layout_height="match_parent"
-            android:paddingTop="70dp">
+            android:paddingTop="70dp"
+            android:background="@color/login_black">
 
             <LinearLayout
                 android:id="@+id/edit_device"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/line1"
                 android:orientation="horizontal"
                 android:foreground="@drawable/user_shape">
 
 
                 <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="@dimen/setting_size"
-                    android:gravity="center"
-                    android:shadowColor="@color/my_main_back"
-                    android:shadowDx="3"
-                    android:shadowDy="3"
-                    android:shadowRadius="5"
+                    style="@style/TextMenu"
                     android:text="@string/edit_node"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/setting_text_size"
-                    android:textStyle="bold" />
+                    android:background="@color/line1" />
 
             </LinearLayout>
 
@@ -138,17 +129,8 @@
 
 
                 <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="@dimen/setting_size"
-                    android:gravity="center"
-                    android:shadowColor="@color/my_main_back"
-                    android:shadowDx="3"
-                    android:shadowDy="3"
-                    android:shadowRadius="5"
-                    android:text="@string/edit_zone"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/setting_text_size"
-                    android:textStyle="bold" />
+                    style="@style/TextMenu"
+                    android:text="@string/edit_zone"/>
 
             </LinearLayout>
 
@@ -162,17 +144,8 @@
 
 
                 <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="@dimen/setting_size"
-                    android:gravity="center"
-                    android:shadowColor="@color/my_main_back"
-                    android:shadowDx="3"
-                    android:shadowDy="3"
-                    android:shadowRadius="5"
-                    android:text="@string/edit_senario"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/setting_text_size"
-                    android:textStyle="bold" />
+                    style="@style/TextMenu"
+                    android:text="@string/edit_senario" />
 
             </LinearLayout>
 
@@ -186,17 +159,8 @@
 
 
                 <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="@dimen/setting_size"
-                    android:gravity="center"
-                    android:shadowColor="@color/my_main_back"
-                    android:shadowDx="3"
-                    android:shadowDy="3"
-                    android:shadowRadius="5"
                     android:text="@string/edit_user"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/setting_text_size"
-                    android:textStyle="bold" />
+                    style="@style/TextMenu" />
 
             </LinearLayout>
 
@@ -210,17 +174,8 @@
 
 
                 <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="@dimen/setting_size"
-                    android:gravity="center"
-                    android:shadowColor="@color/my_main_back"
-                    android:shadowDx="3"
-                    android:shadowDy="3"
-                    android:shadowRadius="5"
-                    android:text="@string/rules"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/setting_text_size"
-                    android:textStyle="bold" />
+                    style="@style/TextMenu"
+                    android:text="@string/rules" />
 
             </LinearLayout>
 
@@ -234,17 +189,8 @@
 
 
                 <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="@dimen/setting_size"
-                    android:gravity="center"
-                    android:shadowColor="@color/my_main_back"
-                    android:shadowDx="3"
-                    android:shadowDy="3"
-                    android:shadowRadius="5"
-                    android:text="@string/about_me"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/setting_text_size"
-                    android:textStyle="bold" />
+                    style="@style/TextMenu"
+                    android:text="@string/about_me" />
 
             </LinearLayout>
 
@@ -258,17 +204,8 @@
 
 
                 <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="@dimen/setting_size"
-                    android:gravity="center"
-                    android:shadowColor="@color/my_main_back"
-                    android:shadowDx="3"
-                    android:shadowDy="3"
-                    android:shadowRadius="5"
-                    android:text="@string/exit"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/setting_text_size"
-                    android:textStyle="bold" />
+                    style="@style/TextMenu"
+                    android:text="@string/exit"/>
 
 
             </LinearLayout>

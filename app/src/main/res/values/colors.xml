@@ -23,6 +23,7 @@
     <color name="login_black">#283036</color>
     <color name="my_main_back">#434343</color>
     <color name="my_transparent">#40000000</color>
+    <color name="transparent">#00000000</color>
     <color name="my_main_back2">#3a4350</color>
     <color name="my_back">#64ffffff</color>
     <color name="my_stroke">#ff17a5d8</color>

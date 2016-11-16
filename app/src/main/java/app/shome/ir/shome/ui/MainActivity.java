@@ -40,6 +40,7 @@ import app.shome.ir.shome.R;
 import app.shome.ir.shome.SHomeActivity;
 import app.shome.ir.shome.SHomeApplication;
 import app.shome.ir.shome.SHomeConstant;
+import app.shome.ir.shome.SettingActivity;
 import app.shome.ir.shome.Utils;
 import app.shome.ir.shome.db.MySqliteOpenHelper;
 import app.shome.ir.shome.db.model.Device;
@@ -172,7 +173,6 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
 
                 } else {
                     settingbtn.setClickable(false);
-
                     settingbtn.startAnimation(rotation);
                     setting_layer.animate().translationX(orgPos1X - screenWidth).setDuration(dtime);
 //                    recyclerView.animate().translationX(orgPos1X).setDuration(dtime);
@@ -212,6 +212,8 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
         edit_senario.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent a = new Intent(MainActivity.this, SettingActivity.class);
+                startActivity(a);
             }
         });
         edit_user.setOnClickListener(new OnClickListener() {

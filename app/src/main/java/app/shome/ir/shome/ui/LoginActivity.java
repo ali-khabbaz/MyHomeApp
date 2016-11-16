@@ -2,6 +2,8 @@ package app.shome.ir.shome.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -25,7 +27,7 @@ public class LoginActivity extends SHomeActivity{
 
     EditText user_id,user_pass;
     Button login,exit;
-    ImageView user,user_shape,user_shape2;
+    ImageView user,user_shape;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +36,6 @@ public class LoginActivity extends SHomeActivity{
 
 
         user_shape=(ImageView)findViewById(R.id.user_shape);
-        user_shape2=(ImageView)findViewById(R.id.user_shape2);
         user_id=(EditText)findViewById(R.id.user_id);
         user_pass=(EditText)findViewById(R.id.user_pass);
         login=(Button)findViewById(R.id.login_btn);
@@ -46,15 +47,14 @@ public class LoginActivity extends SHomeActivity{
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                user_shape.setVisibility(View.INVISIBLE);
-                user_shape2.setVisibility(View.VISIBLE);
+                user_shape.setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_ATOP);
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         Intent i=new Intent(LoginActivity.this,MainActivity.class);
                         startActivity(i);
                     }
-                }, 250);
+                }, 750);
             }
         });
         exit.setOnClickListener(new View.OnClickListener() {

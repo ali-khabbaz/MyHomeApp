@@ -12,7 +12,7 @@
         android:layout_height="190dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="75dp"
+        android:layout_marginTop="60dp"
         android:background="@color/white_pressed"
         app:srcCompat="@drawable/user" />
 
@@ -21,7 +21,7 @@
         android:layout_height="200dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="55dp"
         app:srcCompat="@drawable/user_shape" />
 
     <ImageView
@@ -30,49 +30,30 @@
         android:layout_height="200dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="55dp"
         app:srcCompat="@drawable/user_shape2" />
 
-    <ImageView
-        android:id="@+id/user_shape2"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="70dp"
-        android:visibility="invisible"
-        app:srcCompat="@drawable/user_shape3" />
 
     <EditText
         android:id="@+id/user_id"
+        style="@style/InputTextStyle"
         android:layout_width="200dp"
-        android:layout_height="wrap_content"
         android:layout_below="@+id/user_login_image"
+        android:layout_marginTop="30dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/tedit"
-        android:ems="10"
-        android:gravity="center"
         android:hint="@string/user_id"
-        android:inputType="textPersonName"
-        android:textColor="@color/text"
-        android:textColorHint="@color/text_hint" />
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/user_pass"
+        style="@style/InputTextStyle"
         android:layout_width="200dp"
-        android:layout_height="wrap_content"
         android:layout_below="@+id/user_id"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/tedit"
-        android:ems="10"
         android:gravity="center"
         android:hint="@string/pass"
         android:inputType="numberPassword"
-        android:password="true"
-        android:textColor="@color/text"
-        android:textColorHint="@color/text_hint" />
+        android:password="true"/>
 
     <Button
         android:id="@+id/login_btn"

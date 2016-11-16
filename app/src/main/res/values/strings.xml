@@ -35,6 +35,8 @@
     <string name="edit_user">کاربران</string>
     <string name="edit_zone">اتاق ها</string>
     <string name="edit_node">دستگاه ها</string>
+    <string name="ip">آدرس معتبر اینترنتی</string>
+    <string name="poetnum">شماره درگاه</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

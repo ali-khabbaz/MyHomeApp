@@ -85,15 +85,7 @@
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true" />
 
-    <ImageView
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        app:srcCompat="@drawable/user_shape3"
-        android:layout_marginEnd="64dp"
-        android:layout_centerVertical="true"
-        android:layout_alignParentEnd="true"
-        android:visibility="invisible"
-        android:id="@+id/user_shape2"/>
+
 
 
 </RelativeLayout>
