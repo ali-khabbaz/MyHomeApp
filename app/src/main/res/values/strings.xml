@@ -8,6 +8,8 @@
     <string name="cancle">بی خیال!</string>
     <string name="server_connection">ارتباط به سرور ....</string>
     <string name="new_device">تعریف دستگاه جدید</string>
+    <string name="dev_name">عنوان دستگاه</string>
+    <string name="zone_name">عنوان اتاق</string>
     <string name="new_zone">تعریف اتاق جدید</string>
     <string name="new_category">تعریف نوع جدید</string>
     <string name="new_module">تعیف ماژول جدید</string>

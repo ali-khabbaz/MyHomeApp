@@ -11,17 +11,20 @@
         android:id="@+id/toggleButton2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:scaleType="fitCenter"
-
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:background="@drawable/my_main_buttom"
         android:duplicateParentState="true"
-        android:gravity="center"
-        android:src="@drawable/light3"
-        android:padding="30dp"
         android:clickable="true"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/light3"
+        android:scaleType="fitCenter"
+        android:paddingTop="25dp"
+        android:paddingBottom="25dp"
+        android:id="@+id/devIcon"/>
 
 
 
@@ -29,36 +32,25 @@
         android:focusable="true"
         android:clickable="true"
         android:focusableInTouchMode="true"
-        android:id="@+id/lightZoon"
+        android:id="@+id/zoneName"
         android:layout_width="wrap_content"
-
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/toggleButton2"
-        android:layout_alignStart="@+id/toggleButton2"
-        android:layout_alignTop="@+id/toggleButton2"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="1"
         android:gravity="center"
-
         android:paddingTop="5dp"
-        android:text="New Text"
+        android:text="@string/zone_name"
         android:textColor="@color/white" />
 
     <TextView
 
         android:focusableInTouchMode="true"
-        android:id="@+id/lightName"
+        android:id="@+id/devName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/toggleButton2"
-        android:layout_alignLeft="@+id/toggleButton2"
-        android:layout_alignStart="@+id/toggleButton2"
         android:layout_gravity="center_horizontal|bottom"
-        android:layout_weight="2"
         android:gravity="center"
         android:duplicateParentState="true"
-        android:text="Large Text"
-
+        android:text="@string/dev_name"
         android:textColor="@color/white"
         android:paddingBottom="5dp" />
 

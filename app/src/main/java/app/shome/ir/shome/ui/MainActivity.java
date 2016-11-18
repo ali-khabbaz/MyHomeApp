@@ -2,8 +2,9 @@ package app.shome.ir.shome.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 
@@ -20,9 +21,9 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 import android.widget.TextView;
 
@@ -47,8 +48,6 @@ import app.shome.ir.shome.db.model.Device;
 import app.shome.ir.shome.db.model.Zone;
 import app.shome.ir.shome.service.ServiceDelegate;
 import app.shome.ir.shome.service.Services;
-
-import static android.R.attr.id;
 
 public class MainActivity extends SHomeActivity implements ServiceDelegate, SHomeConstant, OnClickListener {
     //    ProgressDialog progressDialog;
@@ -141,8 +140,8 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
             init();
         }
         final int screenWidth = Utils.getScreenWidth(MainActivity.this);
-        final int sw = screenWidth ;
-        final int dtime = 1500 ;
+        final int sw = screenWidth;
+        final int dtime = 1500;
         setting_layer.setX(orgPos1X - screenWidth);
         assert settingbtn != null;
         settingbtn.setOnClickListener(new View.OnClickListener() {
@@ -162,7 +161,7 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
 //                    recyclerView.animate().translationX(screenWidth).setDuration(dtime);
 //                    setting_layer.setVisibility(View.VISIBLE);
 //                    recyclerView.setVisibility(View.GONE);
-                   final Handler handler = new Handler();
+                    final Handler handler = new Handler();
                     setting_layer.setEnabled(false);
                     handler.postDelayed(new Runnable() {
                         public void run() {
@@ -544,6 +543,8 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
     public class DeviecHolder extends RecyclerView.ViewHolder implements ServiceDelegate {
         Device device;
         ProgressBar progressBar;
+        ImageView devIcon;
+        TextView zoneTextView,titleTextView;
         public View mview;
         public View image;
 
@@ -551,10 +552,12 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
 
             this.device = device;
             device.progressBar = progressBar;
+            device.devIcon = devIcon;
 //            mview.setTag(device);
             image.setTag(device);
-            device.zoneTextView = (TextView) mview.findViewById(R.id.lightZoon);
-            device.titleTextView = (TextView) mview.findViewById(R.id.lightName);
+            device.zoneTextView = (TextView) mview.findViewById(R.id.zoneName);
+            device.titleTextView = (TextView) mview.findViewById(R.id.devName);
+            device.devIcon = (ImageView) mview.findViewById(R.id.devIcon);
             image.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -572,14 +575,18 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
             mview = view;
             image = view.findViewById(R.id.toggleButton2);
             progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+            devIcon = (ImageView) view.findViewById(R.id.devIcon);
+            zoneTextView = (TextView) view.findViewById(R.id.zoneName);
+            titleTextView = (TextView) view.findViewById(R.id.devName);
             progressBar.setVisibility(View.GONE);
+
 
 
 //            int childCount = ((FrameLayout) mview).getChildCount();
 //            for (int i = 0; i < childCount; i++) {
 //                View childAt = ((FrameLayout) mview).getChildAt(i);
-//                childAt.setOnClickListener(MainActivity.this);
-//                if(childAt instanceof ImageButton)
+//                childAtldA.setOnClickListener(MainActivity.this);
+//                if(chit instanceof ImageButton)
 //                    ((ImageButton)childAt).setOnTouchListener(null);//chable(false);
 //            }
 
@@ -591,6 +598,23 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
         public void onPostResult(int requestCode, String date) {
             device.status = (device.status.toUpperCase().equals("HIGH") ? "LOW" : "HIGH");
             progressBar.setVisibility(View.INVISIBLE);
+
+            if (image.isSelected()) {
+                image.setSelected(false);
+                image.setBackgroundResource(R.drawable.up);
+                devIcon.setColorFilter(Color.TRANSPARENT, PorterDuff.Mode.SRC_ATOP);
+                zoneTextView.setTextColor(Color.WHITE);
+                titleTextView.setTextColor(Color.WHITE);
+            } else {
+                image.setSelected(true);
+                image.setBackgroundResource(R.drawable.down);
+                devIcon.setColorFilter(Color.GREEN, PorterDuff.Mode.SRC_ATOP);
+                zoneTextView.setTextColor(Color.GREEN);
+                titleTextView.setTextColor(Color.GREEN);
+
+            }
+
+
         }
     }
 

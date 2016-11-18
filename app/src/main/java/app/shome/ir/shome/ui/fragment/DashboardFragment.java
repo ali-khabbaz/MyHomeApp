@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Vector;
@@ -61,7 +60,7 @@ public class DashboardFragment extends Fragment implements SHomeConstant {
             final TextView lightZoon1=new TextView(getContext());
             lightZoon1.setText(""+i);
 
-            final TextView lightName = (TextView) itemView.findViewById(R.id.lightName);
+            final TextView lightName = (TextView) itemView.findViewById(R.id.devName);
             lightName.setText(String.valueOf(i + 1));
 //            lightZoon.setText(String.valueOf(i + 1));
             if (column + device.span > mGrid.getColumnCount()) {

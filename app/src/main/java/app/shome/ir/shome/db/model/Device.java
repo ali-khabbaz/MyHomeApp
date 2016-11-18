@@ -1,6 +1,8 @@
 package app.shome.ir.shome.db.model;
 
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -25,6 +27,7 @@ public class Device implements Comparable<Device> {
     public Category defaulCategory;
     public Category category;
     public ProgressBar progressBar;
+    public ImageView devIcon;
     public TextView titleTextView,zoneTextView;
 
     @Override
