@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:focusable="true"
-        android:focusableInTouchMode="true"
+
         android:background="@drawable/my_main_buttom"
         android:duplicateParentState="true"
         android:clickable="true"/>
@@ -31,7 +31,7 @@
     <TextView
         android:focusable="true"
         android:clickable="true"
-        android:focusableInTouchMode="true"
+
         android:id="@+id/zoneName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
 
     <TextView
 
-        android:focusableInTouchMode="true"
+
         android:id="@+id/devName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
     <ProgressBar
         android:focusable="true"
         android:clickable="true"
-        android:focusableInTouchMode="true"
+
         style="?android:attr/progressBarStyleSmall"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

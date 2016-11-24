@@ -245,6 +245,7 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
     }
 
     private void initZoneTab() {
+        zoneTabLayout.removeAllViews();
 
         Collection<Zone> values = MySqliteOpenHelper.getInstance().allZones.values();
         for (Zone z : values) {

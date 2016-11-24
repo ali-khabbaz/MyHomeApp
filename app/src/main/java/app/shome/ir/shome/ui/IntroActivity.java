@@ -53,7 +53,15 @@ public class IntroActivity extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewPager.setCurrentItem(++currentindex);
+                if(currentindex>=radioButton.length-1)
+                {
+                    Intent a=new Intent(IntroActivity.this, LoginActivity.class);
+                    startActivity(a);
+                    finish();
+
+                }else {
+                    viewPager.setCurrentItem(++currentindex);
+                }
             }
         });
 
@@ -67,7 +75,8 @@ public class IntroActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                if(position>=radioButton.length)
+                currentindex=position;
+                if(position>=radioButton.length-1)
                 {
                     next.setText("Finish");
                 }else
