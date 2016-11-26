@@ -373,7 +373,6 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
                     String cmdT = jsonObject.getString("CmdT");
                     if (cmdT.equals("3")) {
                         JSONArray zoneD = jsonObject.getJSONArray("ZoneD");
-
                         devices = new Device[zoneD.length()];
                         for (int i = 0; i < zoneD.length(); i++) {
                             devices[i] = new Device();
@@ -565,6 +564,7 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
                     itemClickListener.onItemClick(DeviecHolder.this);
                 }
             });
+			switchDevice();
 //            image.setTag(image.getId(),progressBar);
 //            mview.setOnClickListener(MainActivity.this);
         }
@@ -593,14 +593,10 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
 
 
         }
-
-
-        @Override
-        public void onPostResult(int requestCode, String date) {
-            device.status = (device.status.toUpperCase().equals("HIGH") ? "LOW" : "HIGH");
-            progressBar.setVisibility(View.INVISIBLE);
-
-            if (image.isSelected()) {
+		
+		void switchDevice()
+		{
+			if (device.status.toUpperCase().equals("LOW")) {
                 image.setSelected(false);
                 image.setBackgroundResource(R.drawable.up);
                 devIcon.setColorFilter(Color.TRANSPARENT, PorterDuff.Mode.SRC_ATOP);
@@ -614,6 +610,16 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
                 titleTextView.setTextColor(Color.GREEN);
 
             }
+			
+		}
+
+
+        @Override
+        public void onPostResult(int requestCode, String date) {
+            device.status = (device.status.toUpperCase().equals("HIGH") ? "LOW" : "HIGH");
+            progressBar.setVisibility(View.INVISIBLE);
+			switchDevice();
+            
 
 
         }
