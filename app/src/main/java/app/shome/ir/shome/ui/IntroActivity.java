@@ -44,7 +44,7 @@ public class IntroActivity extends AppCompatActivity {
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent a=new Intent(IntroActivity.this, LoginActivity.class);
+                Intent a=new Intent(IntroActivity.this, SettingActivity.class);
                 startActivity(a);
                 finish();
 
@@ -55,7 +55,7 @@ public class IntroActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(currentindex>=radioButton.length-1)
                 {
-                    Intent a=new Intent(IntroActivity.this, LoginActivity.class);
+                    Intent a=new Intent(IntroActivity.this, SettingActivity.class);
                     startActivity(a);
                     finish();
 

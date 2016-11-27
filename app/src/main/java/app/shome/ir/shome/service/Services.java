@@ -54,18 +54,14 @@ public class Services {
             int ipAddress = wm.getConnectionInfo().getIpAddress();
             String ip1 = String.format("%d.%d.%d", (ipAddress & 0xff), (ipAddress >> 8 & 0xff), (ipAddress >> 16 & 0xff));
             String ip = "";
-            for (int i = 0; i < 255; i++) {
+            for (int i = 192; i < 194; i++) {
                 ip = ip1 + "." + i;
-
                 Socket socket = new Socket();
 //                socket.setSoTimeout(500);
                 try {
-                    socket.connect(new InetSocketAddress(ip, 8080), 500);
-                    SHomeApplication.LOCAL_IP = ip;
-                    SHomeApplication.LOCAL_PORT = port;
-                    SHomeApplication.save();
+                    socket.connect(new InetSocketAddress(ip, 8080), 100);
+                    serviceDelegate.onPostResult(0,ip);
 
-                    break;
                 } catch (IOException e2) {
                     e2.printStackTrace();
                 }

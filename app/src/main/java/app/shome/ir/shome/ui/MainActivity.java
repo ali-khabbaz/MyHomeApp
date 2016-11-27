@@ -11,13 +11,16 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
@@ -55,6 +58,7 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
     LinearLayout progress;
     TextView progressTextView;
     //    ViewPager viewPager;
+    StaggeredGridLayoutManager linearLayoutManager;
     LinearLayout zoneTabLayout;
     LinearLayout dashboard_layer;
     //    DashboardFragment dashboard;
@@ -79,7 +83,8 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
     Comparator<Device> dashboardComprator = new Comparator<Device>() {
         @Override
         public int compare(Device lhs, Device rhs) {
-            return lhs.dashindex.compareTo(rhs.dashindex);
+
+            return (lhs == null || rhs == null) ? 1 : lhs.dashindex.compareTo(rhs.dashindex);
         }
     };
     Comparator<Device> zoneComprator = new Comparator<Device>() {
@@ -90,6 +95,14 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
     };
 
     SwipeRefreshLayout mSwipeRefreshLayout;
+
+    Animation alpha;
+    Animation alpha_out;
+    Animation rotation;
+    Animation rotation_out;
+    int screenWidth;
+    int sw;
+    int dtime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,11 +116,11 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
 
             }
         });
-        final ToggleButton settingbtn = (ToggleButton) findViewById(R.id.setting);
-        final Animation alpha = AnimationUtils.loadAnimation(this, R.anim.alpha);
-        final Animation alpha_out = AnimationUtils.loadAnimation(this, R.anim.alpha_out);
-        final Animation rotation = AnimationUtils.loadAnimation(this, R.anim.clockwise_rotation);
-        final Animation rotation_out = AnimationUtils.loadAnimation(this, R.anim.unclockwise_rotation);
+        settingbtn = (ToggleButton) findViewById(R.id.setting);
+        alpha = AnimationUtils.loadAnimation(this, R.anim.alpha);
+        alpha_out = AnimationUtils.loadAnimation(this, R.anim.alpha_out);
+        rotation = AnimationUtils.loadAnimation(this, R.anim.clockwise_rotation);
+        rotation_out = AnimationUtils.loadAnimation(this, R.anim.unclockwise_rotation);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         setting_layer = (LinearLayout) findViewById(R.id.setting_layer);
         dashboard_layer = (LinearLayout) findViewById(R.id.dashboardLayer);
@@ -125,9 +138,85 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
         progress = (LinearLayout) findViewById(R.id.progressLayout);
 //        viewPager= (ViewPager) findViewById(R.id.devincefragmentcontainer);
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        OnItemClickListener itemClickListener = new OnItemClickListener() {
+            @Override
+            public void onItemClick(DeviecHolder item) {
+                item.progressBar.setVisibility(View.VISIBLE);
+                new Services.ChangeDeviceState(CHANGE_DEVICE_STATUS, item, item.device, SHomeApplication.LOCAL_IP, SHomeApplication.LOCAL_PORT).execute();
 
+
+            }
+        };
         zoneTabLayout = (LinearLayout) findViewById(R.id.zoneLayout);
+        data = MySqliteOpenHelper.getInstance().dashboarDevice;
+        adapter = new MyAdapter(itemClickListener);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        linearLayoutManager = new StaggeredGridLayoutManager(4, OrientationHelper.VERTICAL);
 
+//        linearLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+//
+//            @Override
+//            public int getSpanSize(int position) {
+//                if(data==MySqliteOpenHelper.getInstance().dashboarDevice) {
+//                    if (position == 0)
+//                        return 2;
+//                    else
+//
+//                        return adapter.getItemViewType(position);
+//                }else
+//                {
+//                    if (position == 0)
+//                        return 1;
+//                    else
+//
+//                        return adapter.getItemViewType(position);
+//                }
+//
+//            }
+//        });
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(adapter);
+//        ItemClickSupport.addTo(recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+//            @Override
+//            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+//                Object tag = v.getTag();
+//                if(tag!=null && tag instanceof Device) {
+//                    Device device = (Device) tag;
+//                    new Services.ChangeDeviceState().execute(device);
+//                }
+//                // do it
+//            }
+//        });
+
+
+// Extend the Callback class
+        ItemTouchHelper.Callback _ithCallback = new ItemTouchHelper.Callback() {
+            //and in your imlpementaion of
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+
+                Collections.swap(data, viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                MySqliteOpenHelper.getInstance().updateIndex(data);
+
+
+                adapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+
+                return true;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                //TODO
+            }
+
+            //defines the enabled move directions in each state (idle, swiping, dragging).
+            @Override
+            public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                return makeFlag(ItemTouchHelper.ACTION_STATE_DRAG,
+                        ItemTouchHelper.DOWN | ItemTouchHelper.UP | ItemTouchHelper.START | ItemTouchHelper.END);
+            }
+        };
+        ItemTouchHelper ith = new ItemTouchHelper(_ithCallback);
+        ith.attachToRecyclerView(recyclerView);
 //        progressDialog = new ProgressDialog(this);
 //        tryAgainDialog = getTryAgainDialog();
         if (!SHomeApplication.isInitialization) {
@@ -139,9 +228,9 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
             progress.setVisibility(View.GONE);
             init();
         }
-        final int screenWidth = Utils.getScreenWidth(MainActivity.this);
-        final int sw = screenWidth;
-        final int dtime = 1500;
+        screenWidth = Utils.getScreenWidth(MainActivity.this);
+        sw = screenWidth;
+        dtime = 1500;
         setting_layer.setX(orgPos1X - screenWidth);
         assert settingbtn != null;
         settingbtn.setOnClickListener(new View.OnClickListener() {
@@ -244,6 +333,35 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
 
     }
 
+    @Override
+    public void onBackPressed() {
+        if (settingbtn.isChecked()) {
+            settingbtn.setClickable(false);
+//                    setting_layer.setX(orgPos1X - screenWidth );
+
+            rotation.setRepeatCount(Animation.INFINITE);
+            rotation.setRepeatCount(0);
+            settingbtn.startAnimation(rotation_out);
+//                    settingbtn.setHighlightColor(0xff33b5e5);
+            setting_layer.animate().translationX(setting_layer.getX() + sw).setDuration(dtime);
+            dashboard_layer.animate().alpha((float) 0.3).setDuration(dtime);
+
+//                    recyclerView.animate().translationX(screenWidth).setDuration(dtime);
+//                    setting_layer.setVisibility(View.VISIBLE);
+//                    recyclerView.setVisibility(View.GONE);
+            final Handler handler = new Handler();
+            setting_layer.setEnabled(false);
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    settingbtn.setClickable(true);
+                }
+            }, dtime);
+
+
+        } else
+            super.onBackPressed();
+    }
+
     private void initZoneTab() {
         zoneTabLayout.removeAllViews();
 
@@ -284,73 +402,8 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
         MySqliteOpenHelper.getInstance().loadData(false);
         data = MySqliteOpenHelper.getInstance().dashboarDevice;
         Collections.sort(data, dashboardComprator);
-        OnItemClickListener itemClickListener = new OnItemClickListener() {
-            @Override
-            public void onItemClick(DeviecHolder item) {
-                item.progressBar.setVisibility(View.VISIBLE);
-                new Services.ChangeDeviceState(CHANGE_DEVICE_STATUS, item, item.device, SHomeApplication.LOCAL_IP, SHomeApplication.LOCAL_PORT).execute();
 
 
-            }
-        };
-        adapter = new MyAdapter(itemClickListener);
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        final GridLayoutManager linearLayoutManager = new GridLayoutManager(this, 4, LinearLayoutManager.VERTICAL, false);
-        linearLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-
-            @Override
-            public int getSpanSize(int position) {
-                if (position == 0)
-                    return 1;
-                else
-
-                    return adapter.getItemViewType(position);
-
-            }
-        });
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(adapter);
-//        ItemClickSupport.addTo(recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
-//            @Override
-//            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-//                Object tag = v.getTag();
-//                if(tag!=null && tag instanceof Device) {
-//                    Device device = (Device) tag;
-//                    new Services.ChangeDeviceState().execute(device);
-//                }
-//                // do it
-//            }
-//        });
-
-
-// Extend the Callback class
-        ItemTouchHelper.Callback _ithCallback = new ItemTouchHelper.Callback() {
-            //and in your imlpementaion of
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-
-                Collections.swap(data, viewHolder.getAdapterPosition(), target.getAdapterPosition());
-                MySqliteOpenHelper.getInstance().updateIndex(data);
-
-
-                adapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
-
-                return true;
-            }
-
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                //TODO
-            }
-
-            //defines the enabled move directions in each state (idle, swiping, dragging).
-            @Override
-            public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-                return makeFlag(ItemTouchHelper.ACTION_STATE_DRAG,
-                        ItemTouchHelper.DOWN | ItemTouchHelper.UP | ItemTouchHelper.START | ItemTouchHelper.END);
-            }
-        };
-        ItemTouchHelper ith = new ItemTouchHelper(_ithCallback);
-        ith.attachToRecyclerView(recyclerView);
     }
 
     @Override
@@ -372,7 +425,6 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
                     String cmdT = jsonObject.getString("CmdT");
                     if (cmdT.equals("3")) {
                         JSONArray zoneD = jsonObject.getJSONArray("ZoneD");
-
                         devices = new Device[zoneD.length()];
                         for (int i = 0; i < zoneD.length(); i++) {
                             devices[i] = new Device();
@@ -383,6 +435,7 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
                             if (device != null) {
                                 device.status = devices[i].status;
                                 MySqliteOpenHelper.getInstance().allDevice.put(device.generationId, device);
+                                MySqliteOpenHelper.getInstance().updateDevice(device);
 
 //                            MySqliteOpenHelper.getInstance().allDevice.put(devices[i].generationId,)
                                 continue;
@@ -424,7 +477,7 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
                 SHomeApplication.save();
 
 
-                MySqliteOpenHelper.getInstance().loadData(false);
+                MySqliteOpenHelper.getInstance().loadData(true);
                 init();
 //            progressDialog.dismiss();
             }
@@ -499,7 +552,7 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
 
         @Override
         public int getItemViewType(int position) {
-            if (position == 0) {
+            if (data.get(position) == null) {
                 return 3;
             } else
 
@@ -509,17 +562,51 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             if (viewType == 3) {
-                return new ClockHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_analog_clock, parent, false));
+                final View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_analog_clock, parent, false);
+                itemView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+
+                        final ViewGroup.LayoutParams lp = itemView.getLayoutParams();
+                        if (lp instanceof StaggeredGridLayoutManager.LayoutParams) {
+                            StaggeredGridLayoutManager.LayoutParams sglp =
+                                    (StaggeredGridLayoutManager.LayoutParams) lp;
+                            sglp.setFullSpan(true);
+                            sglp.width = itemView.getWidth() / 2;
+                            sglp.height = itemView.getHeight() / 2;
+
+                            itemView.setLayoutParams(sglp);
+
+                            linearLayoutManager.invalidateSpanAssignments();
+                        }
+                        itemView.getViewTreeObserver().removeOnPreDrawListener(this);
+                        return true;
+                    }
+                });
+
+
+                return new ClockHolder(itemView);
+
             } else
-
-
                 return new DeviecHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_light_device, parent, false));
         }
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            if (position != 0)
+
+            StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();
+
+            if (holder instanceof DeviecHolder) {
                 ((DeviecHolder) holder).setDevice(data.get(position), itemClickListener);
+            } else {
+                layoutParams.setFullSpan(true);
+                layoutParams.width = 800;
+                layoutParams.height = 400;
+                holder.itemView.setLayoutParams(layoutParams);
+                linearLayoutManager.invalidateSpanAssignments();
+
+
+            }
 
 
         }
@@ -534,9 +621,11 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
     }
 
     public class ClockHolder extends RecyclerView.ViewHolder {
+        public View mView;
 
         public ClockHolder(View itemView) {
             super(itemView);
+            mView = itemView;
         }
     }
 
@@ -544,7 +633,7 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
         Device device;
         ProgressBar progressBar;
         ImageView devIcon;
-        TextView zoneTextView,titleTextView;
+        TextView zoneTextView, titleTextView;
         public View mview;
         public View image;
 
@@ -564,6 +653,7 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
                     itemClickListener.onItemClick(DeviecHolder.this);
                 }
             });
+            switchDevice();
 //            image.setTag(image.getId(),progressBar);
 //            mview.setOnClickListener(MainActivity.this);
         }
@@ -581,7 +671,6 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
             progressBar.setVisibility(View.GONE);
 
 
-
 //            int childCount = ((FrameLayout) mview).getChildCount();
 //            for (int i = 0; i < childCount; i++) {
 //                View childAt = ((FrameLayout) mview).getChildAt(i);
@@ -593,13 +682,8 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
 
         }
 
-
-        @Override
-        public void onPostResult(int requestCode, String date) {
-            device.status = (device.status.toUpperCase().equals("HIGH") ? "LOW" : "HIGH");
-            progressBar.setVisibility(View.INVISIBLE);
-
-            if (image.isSelected()) {
+        void switchDevice() {
+            if (device.status.toUpperCase().equals("LOW")) {
                 image.setSelected(false);
                 image.setBackgroundResource(R.drawable.up);
                 devIcon.setColorFilter(Color.TRANSPARENT, PorterDuff.Mode.SRC_ATOP);
@@ -613,6 +697,15 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
                 titleTextView.setTextColor(Color.GREEN);
 
             }
+
+        }
+
+
+        @Override
+        public void onPostResult(int requestCode, String date) {
+            device.status = (device.status.toUpperCase().equals("HIGH") ? "LOW" : "HIGH");
+            progressBar.setVisibility(View.INVISIBLE);
+            switchDevice();
 
 
         }

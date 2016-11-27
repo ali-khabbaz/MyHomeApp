@@ -13,7 +13,8 @@
     <RelativeLayout
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:layout_marginTop="@dimen/activity_horizontal_margin">
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:id="@+id/layout">
 
         <ImageButton
             android:layout_width="match_parent"
@@ -44,5 +45,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/ipConnect" />
+    <Button
+        android:text="@string/server_connection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/start" />
 
 </LinearLayout>

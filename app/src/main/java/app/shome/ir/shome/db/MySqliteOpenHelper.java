@@ -288,6 +288,9 @@ public class MySqliteOpenHelper extends SQLiteOpenHelper implements SHomeConstan
         }
 
         cursor.close();
+        dashboarDevice.add(0,null);
+
+
 
 
     }
@@ -369,8 +372,10 @@ public class MySqliteOpenHelper extends SQLiteOpenHelper implements SHomeConstan
         if(data==dashboarDevice)
         {
             for (int i = 0; i < data.size(); i++) {
-                query="update "+deviceTableName+"  set dashindx="+i+" where id="+data.get(i).id;
-                writableDatabase.execSQL(query);
+                if(data.get(i)!=null) {
+                    query = "update " + deviceTableName + "  set dashindx=" + i + " where id=" + data.get(i).id;
+                    writableDatabase.execSQL(query);
+                }
             }
 
         }else
@@ -381,6 +386,12 @@ public class MySqliteOpenHelper extends SQLiteOpenHelper implements SHomeConstan
             }
 
         }writableDatabase.close();
+
+    }
+
+    public void updateDevice(Device device) {
+        String query="update "+deviceTableName+"  set status='"+device.status+"' where id="+device.id;
+        getWritableDatabase().execSQL(query);
 
     }
 }
