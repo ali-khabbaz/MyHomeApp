@@ -74,10 +74,10 @@ public class Services {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            if (serviceDelegate != null) {
-                serviceDelegate.onPostResult(requestCode, s);
-
-            }
+//            if (serviceDelegate != null) {
+//                serviceDelegate.onPostResult(requestCode, s);
+//
+//            }
         }
     }
 
