@@ -9,7 +9,7 @@ public interface SHomeConstant {
     int DDNS_PORT = 6666;
 
 
-    String LOCAL_IP = "172.16.1.193";
+    String LOCAL_IP = "10.0.3.2";
     int LOCAL_PORT = 8080;
 
 

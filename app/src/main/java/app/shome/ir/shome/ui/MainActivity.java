@@ -358,7 +358,6 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
         if (requestCOde == SERVER_DETECT_REQUEST) {
             progressTextView.setText("Connection Server");
 
-
             new Services.GetStatusService(GET_DEVICE_STATUS, this, SHomeApplication.LOCAL_IP, SHomeApplication.LOCAL_PORT).execute();
 
         } else if (requestCOde == GET_DEVICE_STATUS) {
