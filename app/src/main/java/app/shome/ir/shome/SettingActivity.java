@@ -79,6 +79,8 @@ public class SettingActivity extends AppCompatActivity implements ServiceDelegat
                 SHomeApplication.LOCAL_IP = ip;
                 SHomeApplication.LOCAL_PORT = SHomeConstant.LOCAL_PORT;
                 SHomeApplication.save();
+                Intent a=new Intent(SettingActivity.this,LoginActivity.class);
+                startActivity(a);
             }
         });
 
