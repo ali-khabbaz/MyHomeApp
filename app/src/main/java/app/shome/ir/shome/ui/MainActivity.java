@@ -55,6 +55,7 @@ import app.shome.ir.shome.service.Services;
 public class MainActivity extends SHomeActivity implements ServiceDelegate, SHomeConstant, OnClickListener {
     //    ProgressDialog progressDialog;
 //    AlertDialog tryAgainDialog;
+    float orgPos1X ;
     LinearLayout progress;
     TextView progressTextView;
     //    ViewPager viewPager;
@@ -72,6 +73,7 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
     LinearLayout edit_zone;
     LinearLayout edit_senario;
     LinearLayout setting_layer;
+    LinearLayout menu_space;
     LinearLayout edit_user;
     LinearLayout rules;
     LinearLayout about_me;
@@ -123,6 +125,7 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
         rotation_out = AnimationUtils.loadAnimation(this, R.anim.unclockwise_rotation);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         setting_layer = (LinearLayout) findViewById(R.id.setting_layer);
+        menu_space = (LinearLayout) findViewById(R.id.menu_space);
         dashboard_layer = (LinearLayout) findViewById(R.id.dashboardLayer);
         edit_device = (LinearLayout) findViewById(R.id.edit_device);
         edit_zone = (LinearLayout) findViewById(R.id.edit_zone);
@@ -131,9 +134,9 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
         rules = (LinearLayout) findViewById(R.id.rules);
         about_me = (LinearLayout) findViewById(R.id.about_me);
         exit = (LinearLayout) findViewById(R.id.exit);
+        menu_space.setOnClickListener(this);
+        orgPos1X = setting_layer.getX();
 
-
-        final float orgPos1X = setting_layer.getX();
 
         progress = (LinearLayout) findViewById(R.id.progressLayout);
 //        viewPager= (ViewPager) findViewById(R.id.devincefragmentcontainer);
@@ -260,21 +263,7 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
 
 
                 } else {
-                    settingbtn.setClickable(false);
-                    settingbtn.startAnimation(rotation);
-                    setting_layer.animate().translationX(orgPos1X - screenWidth).setDuration(dtime);
-//                    recyclerView.animate().translationX(orgPos1X).setDuration(dtime);
-                    dashboard_layer.animate().alpha(1).setDuration(dtime);
-//                    setting_layer.setVisibility(View.GONE);
-//                    recyclerView.setVisibility(View.VISIBLE);
-                    final Handler handler = new Handler();
-                    setting_layer.setEnabled(false);
-                    handler.postDelayed(new Runnable() {
-                        public void run() {
-                            settingbtn.setClickable(true);
-                        }
-                    }, dtime);
-
+                   closeMenu();
 
                 }
 
@@ -282,21 +271,8 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
             }
         });
 
-        edit_device.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent a = new Intent(MainActivity.this, DeviceActivity.class);
-                startActivity(a);
-            }
-        });
-        edit_zone.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent a = new Intent(MainActivity.this, ZoneActivity.class);
-                startActivity(a);
-
-            }
-        });
+        edit_device.setOnClickListener(this);
+        edit_zone.setOnClickListener(this);
         edit_senario.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -328,6 +304,27 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
 
     }
 
+    void closeMenu()
+    {
+        settingbtn.setChecked(false);
+        settingbtn.setClickable(false);
+        settingbtn.startAnimation(rotation);
+        setting_layer.animate().translationX(orgPos1X - screenWidth).setDuration(dtime);
+//                    recyclerView.animate().translationX(orgPos1X).setDuration(dtime);
+        dashboard_layer.animate().alpha(1).setDuration(dtime);
+//                    setting_layer.setVisibility(View.GONE);
+//                    recyclerView.setVisibility(View.VISIBLE);
+        final Handler handler = new Handler();
+        setting_layer.setEnabled(false);
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                settingbtn.setClickable(true);
+            }
+        }, dtime);
+
+
+    }
+
     private void refreshContent() {
         new Services.GetStatusService(GET_DEVICE_STATUS, this, SHomeApplication.LOCAL_IP, SHomeApplication.LOCAL_PORT).execute();
 
@@ -336,28 +333,7 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
     @Override
     public void onBackPressed() {
         if (settingbtn.isChecked()) {
-            settingbtn.setClickable(false);
-//                    setting_layer.setX(orgPos1X - screenWidth );
-
-            rotation.setRepeatCount(Animation.INFINITE);
-            rotation.setRepeatCount(0);
-            settingbtn.startAnimation(rotation_out);
-//                    settingbtn.setHighlightColor(0xff33b5e5);
-            setting_layer.animate().translationX(setting_layer.getX() + sw).setDuration(dtime);
-            dashboard_layer.animate().alpha((float) 0.3).setDuration(dtime);
-
-//                    recyclerView.animate().translationX(screenWidth).setDuration(dtime);
-//                    setting_layer.setVisibility(View.VISIBLE);
-//                    recyclerView.setVisibility(View.GONE);
-            final Handler handler = new Handler();
-            setting_layer.setEnabled(false);
-            handler.postDelayed(new Runnable() {
-                public void run() {
-                    settingbtn.setClickable(true);
-                }
-            }, dtime);
-
-
+            closeMenu();
         } else
             super.onBackPressed();
     }
@@ -489,35 +465,20 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
     @Override
     public void onClick(View v) {
 
-
-//        if (v instanceof ImageButton) {
-//            Object o = v.getTag();
-//            if (o != null && o instanceof Device) {
-//                Device device = (Device) o;
-//                int i = data.indexOf(device);
-//                device.progressBar.setVisibility(View.VISIBLE);
-////                if(i!=-1)
-//                adapter.notifyDataSetChanged();
-//
-//
-////                device.titleTextView.setText(device.generationId);
-////                device.titleTextView.setText(device.generationId);
-//
-//
-//                if (device.status.toLowerCase().equals("low")) {
-//                    device.status = "HIGH";
-//
-//                } else {
-//                    device.status = "LOW";
-//                }
-//
-//
-//            } else {
-//                data = MySqliteOpenHelper.getInstance().dashboarDevice;
-//
-//                Collections.sort(data, dashboardComprator);
-//            }
-//        } else {
+        if (v == edit_device) {
+            closeMenu();
+            Intent a = new Intent(MainActivity.this, DeviceActivity.class);
+            a.putExtra("type","device");
+            startActivity(a);
+        } else if (v == edit_zone) {
+            closeMenu();
+            Intent a = new Intent(MainActivity.this, ZoneActivity.class);
+            a.putExtra("type","zone");
+            startActivity(a);
+        }else if(menu_space==v)
+        {
+            closeMenu();
+        }
         Object o = v.getTag();
         if (o instanceof Zone) {
 
@@ -525,15 +486,6 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
             data = z.devices;
             Collections.sort(data, zoneComprator);
         }
-//            else if (o instanceof Device) {
-//                Device device = (Device) o;
-//                new Services.ChangeDeviceState().execute(device);
-//
-//            }
-
-//        }
-//        adapter.notifyDataSetChanged();
-//
 
     }
 

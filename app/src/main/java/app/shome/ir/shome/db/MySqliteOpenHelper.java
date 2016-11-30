@@ -278,7 +278,7 @@ public class MySqliteOpenHelper extends SQLiteOpenHelper implements SHomeConstan
                 a.defaulCategory = category2;
                 category2.devices.add(a);
             }
-            a.status=cursor.getString(cursor.getColumnIndex("status"));
+            a.status = cursor.getString(cursor.getColumnIndex("status"));
 //            contentValues.put("status", a.status);
             if (a.isdash == 1)
                 dashboarDevice.add(a);
@@ -288,9 +288,7 @@ public class MySqliteOpenHelper extends SQLiteOpenHelper implements SHomeConstan
         }
 
         cursor.close();
-        dashboarDevice.add(0,null);
-
-
+        dashboarDevice.add(0, null);
 
 
     }
@@ -369,28 +367,33 @@ public class MySqliteOpenHelper extends SQLiteOpenHelper implements SHomeConstan
     public void updateIndex(Vector<Device> data) {
         SQLiteDatabase writableDatabase = getWritableDatabase();
         String query;
-        if(data==dashboarDevice)
-        {
+        if (data == dashboarDevice) {
             for (int i = 0; i < data.size(); i++) {
-                if(data.get(i)!=null) {
+                if (data.get(i) != null) {
                     query = "update " + deviceTableName + "  set dashindx=" + i + " where id=" + data.get(i).id;
                     writableDatabase.execSQL(query);
                 }
             }
 
-        }else
-        {
+        } else {
             for (int i = 0; i < data.size(); i++) {
-                query="update "+deviceTableName+"  set indx="+i+" where id="+data.get(i).id;
+                query = "update " + deviceTableName + "  set indx=" + i + " where id=" + data.get(i).id;
                 writableDatabase.execSQL(query);
             }
 
-        }writableDatabase.close();
+        }
+        writableDatabase.close();
 
     }
 
     public void updateDevice(Device device) {
-        String query="update "+deviceTableName+"  set status='"+device.status+"' where id="+device.id;
+        String query = "update " + deviceTableName + "  set status='" + device.status + "' where id=" + device.id;
+        getWritableDatabase().execSQL(query);
+
+    }
+
+    public void updateZone(Zone zone) {
+        String query = "update " + zoneTableName + "  set name_fa='" + zone.name_fa + "' where id=" + zone.id;
         getWritableDatabase().execSQL(query);
 
     }
