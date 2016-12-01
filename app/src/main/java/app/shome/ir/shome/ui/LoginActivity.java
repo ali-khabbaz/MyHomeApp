@@ -53,7 +53,7 @@ public class LoginActivity extends SHomeActivity{
                     public void run() {
                         Intent i=new Intent(LoginActivity.this,MainActivity.class);
                         startActivity(i);
-                        finish();
+//                        finish();
                     }
                 }, 750);
             }

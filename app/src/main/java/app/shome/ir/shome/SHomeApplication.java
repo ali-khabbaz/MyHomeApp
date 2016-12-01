@@ -3,6 +3,7 @@ package app.shome.ir.shome;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 
 /**
  * Created by Iman on 10/19/2016.
@@ -18,9 +19,16 @@ public class SHomeApplication extends Application implements SHomeConstant {
     public static int REMOTE_PORT;
 
 
+    public static Typeface BYEKAN_NORMAL;//
+
+
     @Override
     public void onCreate() {
         super.onCreate();
+        if (BYEKAN_NORMAL == null) {
+            BYEKAN_NORMAL = Typeface.createFromAsset(getAssets(), "font/Samim.ttf");
+
+        }
         context = this;
         SharedPreferences app = getSharedPreferences("app", MODE_PRIVATE);
         isInitialization = app.getBoolean("initial", false);

@@ -1,10 +1,26 @@
 package app.shome.ir.shome.utils;
 
+import app.shome.ir.shome.Utils;
+
 public class YearMonthDate {
     public static int gregorianDaysInMonth[] = {31, 28, 31, 30, 31,
             30, 31, 31, 30, 31, 30, 31};
     public static int jalaliDaysInMonth[] = {31, 31, 31, 31, 31, 31,
             30, 30, 30, 30, 30, 29};
+    public static String jalaliMonthText[] = {
+            Utils.unescape_perl_string("\\u0641\\u0631\\u0648\\u0631\\u062f\\u06cc\\u0646"),
+            Utils.unescape_perl_string("\\u0627\\u0631\\u062f\\u06cc\\u0628\\u0647\\u0634\\u062a"),
+            Utils.unescape_perl_string("\\u062e\\u0631\\u062f\\u0627\\u062f"),
+            Utils.unescape_perl_string("\\u062a\\u06cc\\u0631"),
+            Utils.unescape_perl_string("\\u0645\\u0631\\u062f\\u0627\\u062f"),
+            Utils.unescape_perl_string("\\u0634\\u0647\\u0631\\u06cc\\u0648\\u0631"),
+            Utils.unescape_perl_string("\\u0645\\u0647\\u0631"),
+            Utils.unescape_perl_string("\\u0622\\u0628\\u0627\\u0646"),
+            Utils.unescape_perl_string("\\u0622\\u0630\\u0631"),
+            Utils.unescape_perl_string("\\u062f\\u06cc"),
+            Utils.unescape_perl_string("\\u0628\\u0647\\u0645\\u0646"),
+            Utils.unescape_perl_string("\\u0627\\u0633\\u0641\\u0646\\u062f"),
+    };
 
 
     public static YearMonthDate gregorianToJalali(YearMonthDate gregorian) {
@@ -143,6 +159,9 @@ public class YearMonthDate {
 
     public int getMonth() {
         return month;
+    }
+    public String getMonthText() {
+        return jalaliMonthText[month];
     }
 
     public void setMonth(int month) {

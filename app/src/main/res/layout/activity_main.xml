@@ -49,13 +49,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+        <!--<android.support.v7.widget.RecyclerView-->
+            <!--android:id="@+id/recycler_view"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
 
-            android:scrollbars="vertical"
-            android:background="@color/my_main_back2" />
+            <!--android:scrollbars="vertical"-->
+            <!--android:background="@color/my_main_back2" />-->
+            <app.shome.ir.shome.grid.twowayview.widget.TwoWayView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                style="@style/TwoWayView"
+                app:twowayview_layoutManager="SpannableGridLayoutManager"
+                app:twowayview_numColumns="4"
+                app:twowayview_numRows="3" />
         </android.support.v4.widget.SwipeRefreshLayout>
 
 

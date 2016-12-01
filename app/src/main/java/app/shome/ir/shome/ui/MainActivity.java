@@ -6,21 +6,18 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Handler;
+import android.provider.ContactsContract;
 import android.support.v4.widget.SwipeRefreshLayout;
 
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
@@ -34,9 +31,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -49,17 +48,21 @@ import app.shome.ir.shome.Utils;
 import app.shome.ir.shome.db.MySqliteOpenHelper;
 import app.shome.ir.shome.db.model.Device;
 import app.shome.ir.shome.db.model.Zone;
+import app.shome.ir.shome.grid.twowayview.TwoWayLayoutManager;
+import app.shome.ir.shome.grid.twowayview.widget.SpannableGridLayoutManager;
+import app.shome.ir.shome.grid.twowayview.widget.TwoWayView;
 import app.shome.ir.shome.service.ServiceDelegate;
 import app.shome.ir.shome.service.Services;
+import app.shome.ir.shome.utils.YearMonthDate;
 
 public class MainActivity extends SHomeActivity implements ServiceDelegate, SHomeConstant, OnClickListener {
     //    ProgressDialog progressDialog;
 //    AlertDialog tryAgainDialog;
-    float orgPos1X ;
+    float orgPos1X;
     LinearLayout progress;
     TextView progressTextView;
     //    ViewPager viewPager;
-    StaggeredGridLayoutManager linearLayoutManager;
+//    StaggeredGridLayoutManager linearLayoutManager;
     LinearLayout zoneTabLayout;
     LinearLayout dashboard_layer;
     //    DashboardFragment dashboard;
@@ -79,8 +82,9 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
     LinearLayout about_me;
     LinearLayout exit;
     Vector<Device> data;
-    RecyclerView recyclerView;
-    MyAdapter adapter;
+    TwoWayView recyclerView;
+    LayoutAdapter adapter;
+    ClockHolder clockHolder;
 
     Comparator<Device> dashboardComprator = new Comparator<Device>() {
         @Override
@@ -123,7 +127,7 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
         alpha_out = AnimationUtils.loadAnimation(this, R.anim.alpha_out);
         rotation = AnimationUtils.loadAnimation(this, R.anim.clockwise_rotation);
         rotation_out = AnimationUtils.loadAnimation(this, R.anim.unclockwise_rotation);
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+
         setting_layer = (LinearLayout) findViewById(R.id.setting_layer);
         menu_space = (LinearLayout) findViewById(R.id.menu_space);
         dashboard_layer = (LinearLayout) findViewById(R.id.dashboardLayer);
@@ -152,9 +156,12 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
         };
         zoneTabLayout = (LinearLayout) findViewById(R.id.zoneLayout);
         data = MySqliteOpenHelper.getInstance().dashboarDevice;
-        adapter = new MyAdapter(itemClickListener);
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        linearLayoutManager = new StaggeredGridLayoutManager(4, OrientationHelper.VERTICAL);
+        recyclerView = (TwoWayView) findViewById(R.id.recycler_view);
+        adapter = new LayoutAdapter(this, recyclerView, itemClickListener);
+        recyclerView.setAdapter(adapter);
+
+//        linearLayoutManager = new StaggeredGridLayoutManager(4, OrientationHelper.VERTICAL);
+//        linearLayoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
 
 //        linearLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
 //
@@ -177,8 +184,8 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
 //
 //            }
 //        });
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(adapter);
+//        recyclerView.setLayoutManager(linearLayoutManager);
+
 //        ItemClickSupport.addTo(recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
 //            @Override
 //            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
@@ -263,7 +270,7 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
 
 
                 } else {
-                   closeMenu();
+                    closeMenu();
 
                 }
 
@@ -304,8 +311,7 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
 
     }
 
-    void closeMenu()
-    {
+    void closeMenu() {
         settingbtn.setChecked(false);
         settingbtn.setClickable(false);
         settingbtn.startAnimation(rotation);
@@ -468,15 +474,14 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
         if (v == edit_device) {
             closeMenu();
             Intent a = new Intent(MainActivity.this, DeviceActivity.class);
-            a.putExtra("type","device");
+            a.putExtra("type", "device");
             startActivity(a);
         } else if (v == edit_zone) {
             closeMenu();
             Intent a = new Intent(MainActivity.this, ZoneActivity.class);
-            a.putExtra("type","zone");
+            a.putExtra("type", "zone");
             startActivity(a);
-        }else if(menu_space==v)
-        {
+        } else if (menu_space == v) {
             closeMenu();
         }
         Object o = v.getTag();
@@ -493,14 +498,54 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
         void onItemClick(DeviecHolder item);
     }
 
-
-    class MyAdapter extends RecyclerView.Adapter {
+    class LayoutAdapter extends RecyclerView.Adapter {
         OnItemClickListener itemClickListener;
+        private static final int COUNT = 100;
 
-        MyAdapter(OnItemClickListener itemClickListener) {
-            this.itemClickListener = itemClickListener;
+        private final Context mContext;
+        private final TwoWayView mRecyclerView;
+//        private final List<Integer> mItems;
+
+        private int mCurrentItemId = 0;
+
+
+        public LayoutAdapter(Context context, TwoWayView recyclerView, OnItemClickListener a) {
+            mContext = context;
+            itemClickListener = a;
+//            mItems = new ArrayList<Integer>(COUNT);
+            for (int i = 0; i < COUNT; i++) {
+                addItem(i);
+            }
+
+            mRecyclerView = recyclerView;
+
         }
 
+        public void addItem(int position) {
+            final int id = mCurrentItemId++;
+//            mItems.add(position, id);
+            notifyItemInserted(position);
+        }
+
+//        public void removeItem(int position) {
+//            mItems.remove(position);
+//            notifyItemRemoved(position);
+//        }
+
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            if (viewType == 3) {
+                if(clockHolder==null) {
+                    View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_analog_clock, parent, false);
+                    clockHolder= new ClockHolder(itemView);
+                }
+                return clockHolder;
+            } else {
+
+                View view = LayoutInflater.from(mContext).inflate(R.layout.fragment_light_device, parent, false);
+                return new DeviecHolder(view);
+            }
+        }
 
         @Override
         public int getItemViewType(int position) {
@@ -512,72 +557,74 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
         }
 
         @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            if (viewType == 3) {
-                final View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_analog_clock, parent, false);
-                itemView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                    @Override
-                    public boolean onPreDraw() {
-
-                        final ViewGroup.LayoutParams lp = itemView.getLayoutParams();
-                        if (lp instanceof StaggeredGridLayoutManager.LayoutParams) {
-                            StaggeredGridLayoutManager.LayoutParams sglp =
-                                    (StaggeredGridLayoutManager.LayoutParams) lp;
-                            sglp.setFullSpan(true);
-                            sglp.width = itemView.getWidth() / 2;
-                            sglp.height = itemView.getHeight() / 2;
-
-                            itemView.setLayoutParams(sglp);
-
-                            linearLayoutManager.invalidateSpanAssignments();
-                        }
-                        itemView.getViewTreeObserver().removeOnPreDrawListener(this);
-                        return true;
-                    }
-                });
-
-
-                return new ClockHolder(itemView);
-
-            } else
-                return new DeviecHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_light_device, parent, false));
-        }
-
-        @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
-            StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();
-
+            int colSpan ;//= (isVertical ? span2 : span1);
+            int rowSpan ;//= (isVertical ? span1 : span2);
             if (holder instanceof DeviecHolder) {
                 ((DeviecHolder) holder).setDevice(data.get(position), itemClickListener);
-            } else {
-                layoutParams.setFullSpan(true);
-                layoutParams.width = 800;
-                layoutParams.height = 400;
-                holder.itemView.setLayoutParams(layoutParams);
-                linearLayoutManager.invalidateSpanAssignments();
+                colSpan=1;
+
+            }else {
+//                ((DeviecHolder) holder).setDevice(data.get(position), itemClickListener);
+                colSpan=2;
+            }
+            rowSpan=colSpan;
+
+            boolean isVertical = (mRecyclerView.getOrientation() == TwoWayLayoutManager.Orientation.VERTICAL);
+            final View itemView = holder.itemView;
+
+//            final int itemId = mItems.get(position);
 
 
+            final SpannableGridLayoutManager.LayoutParams lp =
+                    (SpannableGridLayoutManager.LayoutParams) itemView.getLayoutParams();
+
+//            final int span1 = (itemId == 0 || itemId == 3 ? 2 : 1);
+//            final int span2 = (itemId == 0 ? 2 : (itemId == 3 ? 3 : 1));
+
+
+
+            if (lp.rowSpan != rowSpan || lp.colSpan != colSpan) {
+                lp.rowSpan = rowSpan;
+                lp.colSpan = colSpan;
+                itemView.setLayoutParams(lp);
             }
 
-
         }
-
 
         @Override
         public int getItemCount() {
             return data.size();
         }
-
-
     }
+
+
+
 
     public class ClockHolder extends RecyclerView.ViewHolder {
         public View mView;
 
+        TextView year,days, month;
+
         public ClockHolder(View itemView) {
             super(itemView);
             mView = itemView;
+            year= (TextView) itemView.findViewById(R.id.year);
+            days= (TextView) itemView.findViewById(R.id.days);
+            month = (TextView) itemView.findViewById(R.id.month);
+
+            year.setTypeface(SHomeApplication.BYEKAN_NORMAL);
+            days.setTypeface(SHomeApplication.BYEKAN_NORMAL);
+            month .setTypeface(SHomeApplication.BYEKAN_NORMAL);
+            Date d=new Date();
+            Calendar instance = Calendar.getInstance();
+            instance.setTime(d);
+            YearMonthDate a=new YearMonthDate(instance.get(Calendar.YEAR),instance.get(Calendar.MONTH),instance.get(Calendar.DAY_OF_MONTH));
+            YearMonthDate yearMonthDate = YearMonthDate.gregorianToJalali(a);
+            year.setText(""+yearMonthDate.getYear());
+            days.setText(""+yearMonthDate.getDate());
+            month.setText(yearMonthDate.getMonthText());
+
         }
     }
 
@@ -663,5 +710,111 @@ public class MainActivity extends SHomeActivity implements ServiceDelegate, SHom
         }
     }
 
+    DisplayMetrics dm;
+
+    public int containerHeight(MainActivity ba) {
+        if (dm == null) {
+            dm = new DisplayMetrics();
+            ba.getWindowManager().getDefaultDisplay().getMetrics(dm);
+        }
+
+        return (int) (dm.heightPixels / 3);
+    }
 
 }
+//class MyAdapter extends RecyclerView.Adapter {
+//    OnItemClickListener itemClickListener;
+//
+//    MyAdapter(OnItemClickListener itemClickListener) {
+//        this.itemClickListener = itemClickListener;
+//    }
+//
+//
+//    @Override
+//    public int getItemViewType(int position) {
+//        if (data.get(position) == null) {
+//            return 3;
+//        } else
+//
+//            return (data.get(position).span);
+//    }
+//
+//    @Override
+//    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+//        if (viewType == 3) {
+//            final View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_analog_clock, parent, false);
+////                itemView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+////                    @Override
+////                    public boolean onPreDraw() {
+////
+////                        final ViewGroup.LayoutParams lp = itemView.getLayoutParams();
+////                        if (lp instanceof StaggeredGridLayoutManager.LayoutParams) {
+////                            StaggeredGridLayoutManager.LayoutParams sglp =
+////                                    (StaggeredGridLayoutManager.LayoutParams) lp;
+//////                            sglp.setFullSpan(true);
+////                            sglp.width = itemView.getWidth() ;
+//////                            sglp.height = sglp.width ;
+////
+////                            itemView.setLayoutParams(sglp);
+////
+////                            linearLayoutManager.invalidateSpanAssignments();
+////                        }
+////                        itemView.getViewTreeObserver().removeOnPreDrawListener(this);
+////                        return true;
+////                    }
+////                });
+//
+//
+//            return new ClockHolder(itemView);
+//
+//        } else {
+//            final View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_light_device, parent, false);
+////                itemView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+////                    @Override
+////                    public boolean onPreDraw() {
+////
+////                        final ViewGroup.LayoutParams lp = itemView.getLayoutParams();
+////                        if (lp instanceof StaggeredGridLayoutManager.LayoutParams) {
+////                            StaggeredGridLayoutManager.LayoutParams sglp =
+////                                    (StaggeredGridLayoutManager.LayoutParams) lp;
+////                            sglp.setFullSpan(false);
+////                            sglp.width = itemView.getWidth() ;
+////                            sglp.height = sglp.width;
+////                            itemView.setLayoutParams(sglp);
+////
+////                            linearLayoutManager.invalidateSpanAssignments();
+////                        }
+////                        itemView.getViewTreeObserver().removeOnPreDrawListener(this);
+////                        return true;
+////                    }
+////                });
+//            return new DeviecHolder(itemView);
+//        }
+//    }
+//
+//    @Override
+//    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+//
+//        StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();
+//
+//        if (holder instanceof DeviecHolder) {
+//            ((DeviecHolder) holder).setDevice(data.get(position), itemClickListener);
+//        } else {
+////                layoutParams.setFullSpan(true);
+////                layoutParams.width = 800;
+////                layoutParams.height = 400;
+////                holder.itemView.setLayoutParams(layoutParams);
+////                linearLayoutManager.invalidateSpanAssignments();
+//        }
+//
+//
+//    }
+//
+//
+//    @Override
+//    public int getItemCount() {
+//        return data.size();
+//    }
+//
+//
+//}
